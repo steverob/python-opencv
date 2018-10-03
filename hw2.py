@@ -38,14 +38,13 @@ def toGrayScale():
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     return image
 
-def sliderHandler(self):
+def smoothHandler(value):
     global image
-    n = self
-    image = reload_image(filename)
+    image = reload_image(file_name)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    if self != 0:
-        kernel = np.ones((n,n), np.float32)/(n*n)
-        image = cv2.filter2D(image, -1, kernel)
+    if value % 2 == 0:
+        value = value + 1
+    image = cv2.GaussianBlur(image, (value, value), 0)
     cv2.imshow('image', image)
 
 def convolve(image, kernel):
@@ -74,7 +73,7 @@ def sliderHandler2(self):
 
 def sliderHandler3(self):
     global image
-    image = reload_image(filename)
+    image = reload_image(file_name)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     new = image
     n = self
@@ -93,7 +92,7 @@ def sliderHandler3(self):
 
 def sliderHandler4(self):
     global image
-    image = reload_image(filename)
+    image = reload_image(file_name)
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     new = image
     n = self
@@ -105,8 +104,8 @@ def sliderHandler4(self):
 
 def main():
     global image
-    global filename
-    image, filename = load_image()
+    global file_name
+    image, file_name = load_image()
     print("Press h for help")
     count = 0
 
@@ -114,17 +113,17 @@ def main():
         key = cv2.waitKey()
         print (key)
         if key == ord('i'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
 
         elif key == ord('w'):
             cv2.imwrite("out.jpg", image)
 
         elif key == ord('g'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = toGrayScale()
 
         elif key == ord('G'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             if len(image.shape) == 3:
                 aux = np.zeros((image.shape[0], image.shape[1]), dtype = image.dtype)
                 for (x, y), v in np.ndenumerate(aux):
@@ -134,7 +133,7 @@ def main():
                 image_gray = image
 
         elif key == ord('c'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             if len(image.shape) == 3:
                 if count == 0:
                     image[:,:,1] = 0
@@ -152,39 +151,39 @@ def main():
                 print("Not possible to convert to b, g or r")
 
         elif key == ord('s'):
-           image = reload_image(filename)
+           image = reload_image(file_name)
            image = toGrayScale()
            cv2.imshow('image', image)
-           cv2.createTrackbar('s', 'image', 0, 255, sliderHandler)
+           cv2.createTrackbar('s', 'image', 0, 255, smoothHandler)
 
         elif key == ord('S'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = toGrayScale()
             cv2.imshow('image', image)
             cv2.createTrackbar('s', 'image', 0, 255, sliderHandler2)
 
         elif key == ord('d'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = cv2.resize(image, (int(image.shape[1]/2), int(image.shape[0]/2)))
 
         elif key == ord('D'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = cv2.pyrDown(image)
 
         elif key == ord('x'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = toGrayScale()
             sobelx = cv2.Sobel(image,cv2.CV_64F,1,0,ksize=5)
             image = cv2.normalize(sobelx, image, alpha = 0, beta = 1,norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_64F)
 
         elif key == ord('y'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = toGrayScale()
             sobely = cv2.Sobel(image,cv2.CV_64F,0,1,ksize=5)
             image = cv2.normalize(sobely, image, alpha = 0, beta = 1,norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_64F)
 
         elif key == ord('m'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = toGrayScale()
             sobelx = cv2.Sobel(image,cv2.CV_64F,1,0,ksize=5)
             sobely = cv2.Sobel(image,cv2.CV_64F,0,1,ksize=5)
@@ -192,12 +191,12 @@ def main():
             image = cv2.normalize(gradient, image, alpha = 0, beta = 1,norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_64F)
 
         elif key == ord('p'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = toGrayScale()
             cv2.createTrackbar('s', 'image', 0,255, sliderHandler3)
 
         elif key == ord('r'):
-            image = reload_image(filename)
+            image = reload_image(file_name)
             image = toGrayScale()
             cv2.createTrackbar('s', 'image', 0, 360, sliderHandler4)
 
