@@ -33,7 +33,7 @@ def reload_image(file_name):
     
     return img
 
-def togray():
+def toGrayScale():
     global image
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     return image
@@ -121,7 +121,7 @@ def main():
 
         elif key == ord('g'):
             image = reload_image(filename)
-            image = togray()
+            image = toGrayScale()
 
         elif key == ord('G'):
             image = reload_image(filename)
@@ -153,13 +153,13 @@ def main():
 
         elif key == ord('s'):
            image = reload_image(filename)
-           image = togray()
+           image = toGrayScale()
            cv2.imshow('image', image)
            cv2.createTrackbar('s', 'image', 0, 255, sliderHandler)
 
         elif key == ord('S'):
             image = reload_image(filename)
-            image = togray()
+            image = toGrayScale()
             cv2.imshow('image', image)
             cv2.createTrackbar('s', 'image', 0, 255, sliderHandler2)
 
@@ -173,19 +173,19 @@ def main():
 
         elif key == ord('x'):
             image = reload_image(filename)
-            image = togray()
+            image = toGrayScale()
             sobelx = cv2.Sobel(image,cv2.CV_64F,1,0,ksize=5)
             image = cv2.normalize(sobelx, image, alpha = 0, beta = 1,norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_64F)
 
         elif key == ord('y'):
             image = reload_image(filename)
-            image = togray()
+            image = toGrayScale()
             sobely = cv2.Sobel(image,cv2.CV_64F,0,1,ksize=5)
             image = cv2.normalize(sobely, image, alpha = 0, beta = 1,norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_64F)
 
         elif key == ord('m'):
             image = reload_image(filename)
-            image = togray()
+            image = toGrayScale()
             sobelx = cv2.Sobel(image,cv2.CV_64F,1,0,ksize=5)
             sobely = cv2.Sobel(image,cv2.CV_64F,0,1,ksize=5)
             gradient = cv2.magnitude(sobelx, sobely)
@@ -193,12 +193,12 @@ def main():
 
         elif key == ord('p'):
             image = reload_image(filename)
-            image = togray()
+            image = toGrayScale()
             cv2.createTrackbar('s', 'image', 0,255, sliderHandler3)
 
         elif key == ord('r'):
             image = reload_image(filename)
-            image = togray()
+            image = toGrayScale()
             cv2.createTrackbar('s', 'image', 0, 360, sliderHandler4)
 
         elif key == ord('h'):
