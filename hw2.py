@@ -12,22 +12,17 @@ import sys
 import math
 
 
-def get_image():
-    filename = input("Write a file name or press enter to capture an image: \n")
+def load_image():
+    file_name = input("Enter image file name or RETURN to capture from webcam: \n")
 
-    if len(filename) > 1:
-        original_image = cv2.imread(filename)
+    if not file_name.strip():
+        capturer = cv2.VideoCapture(0)
+        _, img = capturer.read()
     else:
-        cap = cv2.VideoCapture(0)
-        retval,original_image = cap.read()
+        img = cv2.imread(file_name) # imread reads files as RGB by default - https://docs.opencv.org/2.4.13.2/doc/user_guide/ug_mat.html#images
 
-    original_image = to3channel(original_image)
-
-    while original_image.shape[0] > 1200 or original_image.shape[1] > 750:
-        original_image = cv2.resize(original_image,(int(original_image.shape[1]/2), int(original_image.shape[0]/2)))
-
-    cv2.imshow('image', original_image)
-    return (original_image, filename)
+    cv2.imshow('image', img)
+    return (img, file_name)
 
 def reloadimage(filename):
     if len(filename) > 1:
@@ -42,11 +37,6 @@ def reloadimage(filename):
 def togray():
     global image
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    return image
-
-def to3channel(image):
-    if len(image.shape) == 2:
-        image = cv2.cvtColor(image, cv2.GRAY2BGR)
     return image
 
 def sliderHandler(self):
@@ -117,7 +107,7 @@ def sliderHandler4(self):
 def main():
     global image
     global filename
-    image, filename = get_image()
+    image, filename = load_image()
     print("Press h for help")
     count = 0
 
