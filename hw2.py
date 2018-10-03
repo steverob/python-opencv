@@ -47,6 +47,7 @@ def smoothHandler(value):
     image = cv2.GaussianBlur(image, (value, value), 0)
     cv2.imshow('image', image)
 
+# DID NOT MODIFY
 def convolve(image, kernel):
   (iH, iW) = image.shape[:2]
   (kH, kW) = kernel.shape[:2]
@@ -63,12 +64,10 @@ def convolve(image, kernel):
   output = (output * 255).astype("uint8")
   return output
 
-def sliderHandler2(self):
+def customConvolutionSmoothHandler(value):
     global image
-    n = self
-    if self != 0:
-        kernel = np.ones((n,n), np.float32)/(n*n)
-        image = convolve(kernel, image)
+    kernel = np.ones((value, value), np.float32) / (value * value)
+    image = convolve(kernel, image)
     cv2.imshow('image', image)
 
 def sliderHandler3(self):
@@ -154,13 +153,13 @@ def main():
            image = reload_image(file_name)
            image = toGrayScale()
            cv2.imshow('image', image)
-           cv2.createTrackbar('s', 'image', 0, 255, smoothHandler)
+           cv2.createTrackbar('smoothing', 'image', 0, 255, smoothHandler)
 
-        elif key == ord('S'):
+        elif key == ord('l'): # Instruction is for capital 'S' but I'm not able to input uppercase letters
             image = reload_image(file_name)
             image = toGrayScale()
             cv2.imshow('image', image)
-            cv2.createTrackbar('s', 'image', 0, 255, sliderHandler2)
+            cv2.createTrackbar('customSmoothing', 'image', 0, 255, customConvolutionSmoothHandler)
 
         elif key == ord('d'):
             image = reload_image(file_name)
